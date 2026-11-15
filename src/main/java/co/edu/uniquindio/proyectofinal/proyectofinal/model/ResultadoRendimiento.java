@@ -6,6 +6,7 @@ public class ResultadoRendimiento {
     private final String operacion; 
     private final int n ;
     private final String estructuraA;
+    private final String complejidadA;
     private final double msA;
     private final String estructuraB;
     private final String complejidadB;
@@ -23,6 +24,11 @@ public class ResultadoRendimiento {
     public String getEstructuraA() {
         return estructuraA;
     }
+
+    public String getComplejidadA() {
+        return complejidadA;
+    }
+
     public double getMsA() {
         return msA;
     }
@@ -35,11 +41,13 @@ public class ResultadoRendimiento {
     public double getMsB() {
         return msB;
     }
-    public ResultadoRendimiento(String operacion, int n, String estructuraA, double msA, String estructuraB,
+
+    public ResultadoRendimiento(String operacion, int n, String estructuraA,String complejidadA,  double msA, String estructuraB,
             String complejidadB, double msB) {
         this.operacion = operacion;
         this.n = n;
         this.estructuraA = estructuraA;
+        this.complejidadA= complejidadA;
         this.msA = msA;
         this.estructuraB = estructuraB;
         this.complejidadB = complejidadB;

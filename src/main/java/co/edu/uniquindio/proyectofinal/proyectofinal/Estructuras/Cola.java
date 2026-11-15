@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /*
  Cola (FIFO) enlazada
-usad aen notificaciones pendientes de despacho (se entregan en el orden en que se generaron) y el recorrido BFS del grafo y del árbol (amplitud).
+usada en notificaciones pendientes de despacho (se entregan en el orden en que se generaron) y el recorrido BFS del grafo y del árbol (amplitud).
  */
 public class Cola<T> implements Iterable<T>, Serializable {
 

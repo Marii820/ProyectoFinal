@@ -79,8 +79,83 @@ public class Usuario implements Serializable {
         }
     }
 
+    public boolean verificarContrasena(String contrasena) {
+        return contrasena != null && hash(contrasena).equals(contrasenaHash);
+    }
 
+    public void cambiarContrasena(String nueva) {
+        this.contrasenaHash = hash(nueva);
+    }
 
+    public void agregarBilletera(Billetera b) { billeteras.addLast(b); }
+
+    public void registrarTransaccion(Transaccion t) { historial.addFirst(t); } // lo más reciente primero
+
+    public double saldoDisponible() { return cuentaPrincipal.getSaldo(); }
+
+    public double saldoEnBilleteras() {
+        double total = 0;
+        for (Billetera b : billeteras) total += b.getSaldo();
+        return total;
+    }
+
+    public double saldoTotal() { return saldoDisponible() + saldoEnBilleteras(); }
+
+    public Cuenta buscarCuenta(String codigo) {
+        if (codigo == null) return null;
+        if (cuentaPrincipal.getCodigo().equalsIgnoreCase(codigo.trim())) return cuentaPrincipal;
+        return billeteras.buscar(b -> b.getCodigo().equalsIgnoreCase(codigo.trim()));
+    }
+
+    public SimpleLinkedList<Cuenta> cuentas() {
+        SimpleLinkedList<Cuenta> l = new SimpleLinkedList<>();
+        l.addLast(cuentaPrincipal);
+        for (Billetera b : billeteras) l.addLast(b);
+        return l;
+    }
+
+    public boolean agregarPuntos(int p) {
+        if (p < 0) throw new IllegalArgumentException("Los puntos deben ser positivos");
+        puntosAcumulados += p;
+        puntosDisponibles += p;
+        return actualizarNivel();
+    }
+
+    public void descontarPuntos(int p) {
+        puntosAcumulados = Math.max(0, puntosAcumulados - p);
+        puntosDisponibles = Math.max(0, puntosDisponibles - p);
+        actualizarNivel();
+    }
+
+    public void gastarPuntos(int p) {
+        if (p > puntosDisponibles) throw new IllegalStateException("No tiene puntos suficientes");
+        puntosDisponibles -= p;
+    }
+
+    public boolean actualizarNivel() {
+        NivelUsuario nuevo = NivelUsuario.segunPuntos(puntosAcumulados);
+        boolean subio = nuevo.ordinal() > nivel.ordinal();
+        nivel = nuevo;
+        return subio;
+    }
+
+    public int puntosParaSiguienteNivel() {
+        NivelUsuario sig = nivel.siguiente();
+        return sig == null ? 0 : sig.getPuntosMin() - puntosAcumulados;
+    }
+
+    public void recibirNotificacion(Notificacion n) {
+        notificaciones.addFirst(n);
+        if (notificaciones.getSize() > MAX_NOTIFICACIONES) notificaciones.eliminarUltimo();
+    }
+
+    public int notificacionesNoLeidas() {
+        return notificaciones.contar(n -> !n.isLeida());
+    }
+
+    public void marcarNotificacionesLeidas() {
+        for (Notificacion n : notificaciones) n.setLeida(true);
+    }
 
     @Override
     public String toString() { return nombre + " (" + id + ")"; }
