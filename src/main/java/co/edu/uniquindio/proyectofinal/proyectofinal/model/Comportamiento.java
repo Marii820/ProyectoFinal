@@ -48,6 +48,8 @@ public class Comportamiento implements Serializable {
         return patron;
     }
 
+    public Usuario getUsuario() { return transaccion.getUsuario(); }
+
     public NivelRiesgo getNivelRiesgo() {
         return nivelRiesgo;
     }

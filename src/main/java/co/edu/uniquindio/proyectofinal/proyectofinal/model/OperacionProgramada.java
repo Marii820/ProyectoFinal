@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 
 public class OperacionProgramada implements Comparable<OperacionProgramada>, Serializable {
 
-    private  static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 2L;
+
     private final String id;
     private LocalDateTime fechaEjecucion;
     private final TipoTransaccion tipo;
@@ -21,63 +22,14 @@ public class OperacionProgramada implements Comparable<OperacionProgramada>, Ser
     private final Cuenta destino;
     private final Frecuencia frecuencia;
     private final String descripcion;
-    private final int prioridad;
-    private boolean avisada; // es decir el aviso de "Proxima a ejecutaese"
+    private final int prioridad;     // ordinal del nivel del usuario al programarla
+    private boolean avisada;         // ya se mandó la alerta de "próxima a ejecutarse"
     private int ejecuciones;
     private int fallos;
 
-
-    public String getId() {
-        return id;
-    }
-
-    public LocalDateTime getFechaEjecucion() {
-        return fechaEjecucion;
-    }
-
-    public TipoTransaccion getTipo() {
-        return tipo;
-    }
-
-    public double getValor() {
-        return valor;
-    }
-
-    public Cuenta getOrigen() {
-        return origen;
-    }
-
-    public Cuenta getDestino() {
-        return destino;
-    }
-
-    public Frecuencia getFrecuencia() {
-        return frecuencia;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public int getPrioridad() {
-        return prioridad;
-    }
-
-    public boolean isAvisada() {
-        return avisada;
-    }
-
-    public int getEjecuciones() {
-        return ejecuciones;
-    }
-
-    public int getFallos() {
-        return fallos;
-    }
-
     public OperacionProgramada(String id, LocalDateTime fechaEjecucion, TipoTransaccion tipo, double valor,
-            Cuenta origen, Cuenta destino, Frecuencia frecuencia, String descripcion, int prioridad, boolean avisada,
-            int ejecuciones, int fallos) {
+                               Cuenta origen, Cuenta destino, Frecuencia frecuencia,
+                               String descripcion, int prioridad) {
         this.id = id;
         this.fechaEjecucion = fechaEjecucion;
         this.tipo = tipo;
@@ -85,38 +37,41 @@ public class OperacionProgramada implements Comparable<OperacionProgramada>, Ser
         this.origen = origen;
         this.destino = destino;
         this.frecuencia = frecuencia;
-        this.descripcion = descripcion== null ? "" : descripcion;
+        this.descripcion = descripcion == null ? "" : descripcion;
         this.prioridad = prioridad;
     }
-    /* Crea la transaccion al momento de que se aplica que sea programada */
-    public Transaccion ejecutar(String idTransaccion){
+
+    /** Crea la transacción a aplicar (la aplica SistemaFintech). */
+    public Transaccion ejecutar(String idTransaccion) {
         Transaccion t = new Transaccion(idTransaccion, fechaEjecucion, tipo, valor, origen, destino);
         t.setProgramada(true);
-        t.setDescripcion(descripcion.isBlank() ? "Programada " + id : descripcion + " ( " + id + " )");
-        return  t ; 
-
+        t.setDescripcion(descripcion.isBlank() ? "Programada " + id : descripcion + " (" + id + ")");
+        return t;
     }
-    /* Informacion y calcu;a cuando es la siguiente fecha */
-    public LocalDateTime calcularSiguienteFecha(){
-        return  switch(frecuencia){
+
+    public void registrarResultado(boolean exitosa) {
+        if (exitosa) ejecuciones++; else fallos++;
+    }
+
+    /** Siguiente fecha según la frecuencia; null si es única. */
+    public LocalDateTime calcularSiguienteFecha() {
+        return switch (frecuencia) {
             case DIARIA -> fechaEjecucion.plusDays(1);
             case SEMANAL -> fechaEjecucion.plusWeeks(1);
             case MENSUAL -> fechaEjecucion.plusMonths(1);
             case UNICA -> null;
         };
     }
-    /* actualiza la fecha */
-    public void reprogramar(){
+
+    public void reprogramar() {
         fechaEjecucion = calcularSiguienteFecha();
-        avisada = false; 
+        avisada = false;
     }
-    /*  */
-    public Usuario getUsuario(){
-        return  origen != null ? origen.getPropietario() : destino.getPropietario();
+
+    public Usuario getUsuario() {
+        return origen != null ? origen.getPropietario() : destino.getPropietario();
     }
-    public String getCodigoOrigen() { return origen == null ? "-" : origen.getCodigo(); }
-    public String getCodigoDestino() { return destino == null ? "-" : destino.getCodigo(); }
-    
+
     @Override
     public int compareTo(OperacionProgramada otra) {
         int c = fechaEjecucion.compareTo(otra.fechaEjecucion);
@@ -124,6 +79,23 @@ public class OperacionProgramada implements Comparable<OperacionProgramada>, Ser
         c = Integer.compare(otra.prioridad, prioridad); // mayor nivel primero
         return c != 0 ? c : id.compareTo(otra.id);
     }
+
+    public String getId() { return id; }
+    public LocalDateTime getFechaEjecucion() { return fechaEjecucion; }
+    public TipoTransaccion getTipo() { return tipo; }
+    public double getValor() { return valor; }
+    public Cuenta getOrigen() { return origen; }
+    public Cuenta getDestino() { return destino; }
+    public Frecuencia getFrecuencia() { return frecuencia; }
+    public String getDescripcion() { return descripcion; }
+    public int getPrioridad() { return prioridad; }
+    public boolean isAvisada() { return avisada; }
+    public void setAvisada(boolean avisada) { this.avisada = avisada; }
+    public int getEjecuciones() { return ejecuciones; }
+    public int getFallos() { return fallos; }
+
+    public String getCodigoOrigen() { return origen == null ? "-" : origen.getCodigo(); }
+    public String getCodigoDestino() { return destino == null ? "-" : destino.getCodigo(); }
     
 
 
