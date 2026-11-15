@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.admin.SeguridadController"
+      spacing="14" stylesheets="@../../estilos.css">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+    <children>
+        <Label styleClass="titulo" text="Detección de comportamiento inusual"/>
+        <Label styleClass="ayuda" wrapText="true"
+               text="Cada operación se revisa contra el historial del usuario. Cada patrón suma puntaje (1-2 = riesgo MEDIO, 3 o más = ALTO): RÁFAGA (3+ transferencias en 5 min, +2) · MONTO_ALTO (más de 3 veces su promedio, +2) · DESTINO_REPETIDO (3+ envíos al mismo destino en 30 min, +2) · FRAGMENTACIÓN (salidas desde 3+ cuentas propias en 10 min, +2) · CAMBIO_FRECUENCIA (5+ operaciones en una hora cuando su promedio es mucho menor, +1) · HORARIO_INUSUAL (entre 12 y 5 a.m. cuando casi nunca opera a esa hora, +1). Al detectarse se marca la transacción con su riesgo, se guarda aquí y el usuario recibe una alerta de seguridad."/>
+        <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <children>
+                        <ComboBox fx:id="cbRiesgo" promptText="Todos los riesgos"/>
+                        <TextField fx:id="txtCedula" prefWidth="160" promptText="Cédula (opcional)"/>
+                        <Button onAction="#filtrar" text="Filtrar"/>
+                        <Button onAction="#verTodo" text="Ver todo"/>
+                        <Label fx:id="lblResumen" styleClass="ayuda"/>
+                    </children>
+                </HBox>
+                <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colId" prefWidth="65" text="ID"/>
+                        <TableColumn fx:id="colFecha" prefWidth="125" text="Fecha"/>
+                        <TableColumn fx:id="colUsuario" prefWidth="190" text="Usuario"/>
+                        <TableColumn fx:id="colTransaccion" prefWidth="260" text="Transacción"/>
+                        <TableColumn fx:id="colRiesgo" prefWidth="80" text="Riesgo"/>
+                        <TableColumn fx:id="colPatron" prefWidth="200" text="Patrones"/>
+                        <TableColumn fx:id="colDescripcion" prefWidth="380" text="Descripción"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
+</VBox>

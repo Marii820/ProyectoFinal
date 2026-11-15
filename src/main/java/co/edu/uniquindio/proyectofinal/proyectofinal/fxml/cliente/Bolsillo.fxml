@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Detalle de UN bolsillo: saldo, meta, detalles, movimientos y botones Cargar / Sacar. -->
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.BolsilloController"
+      spacing="14" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="20" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Button onAction="#volver" styleClass="boton-volver" text="‹  Volver"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <MenuButton styleClass="boton-editar" text="Editar">
+                    <items>
+                        <MenuItem onAction="#renombrar" text="Cambiar nombre"/>
+                        <MenuItem onAction="#cambiarMeta" text="Cambiar meta de ahorro"/>
+                        <MenuItem fx:id="miBloquear" onAction="#bloquear" text="Bloquear"/>
+                        <MenuItem onAction="#eliminar" text="Eliminar bolsillo"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+        <VBox spacing="0">
+            <children>
+                <Label styleClass="ayuda" text="Tus bolsillos"/>
+                <Label fx:id="lblNombre" styleClass="titulo-grande" text="Bolsillo"/>
+            </children>
+        </VBox>
+
+        <VBox spacing="6" styleClass="tarjeta">
+            <padding>
+                <Insets top="18" right="20" bottom="18" left="20"/>
+            </padding>
+            <children>
+                <Label styleClass="ayuda" text="Saldo disponible"/>
+                <Label fx:id="lblSaldo" styleClass="saldo-cuenta" text="\$0"/>
+                <ProgressBar fx:id="barraMeta" maxWidth="Infinity" progress="0.0"/>
+                <Label fx:id="lblMeta" styleClass="ayuda"/>
+            </children>
+        </VBox>
+
+        <HBox spacing="12">
+            <children>
+                <Button onAction="#cargar" styleClass="accion-grande,primario" text="Cargar"/>
+                <Button onAction="#sacar" styleClass="accion-grande" text="Sacar a mi cuenta"/>
+            </children>
+        </HBox>
+
+        <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab text="Detalles">
+                    <content>
+                        <VBox spacing="12" styleClass="tarjeta">
+                            <padding>
+                                <Insets top="16" right="16" bottom="16" left="16"/>
+                            </padding>
+                            <children>
+                                <GridPane hgap="20" vgap="8">
+                                    <children>
+                                        <Label styleClass="ayuda" text="Meta de ahorro" GridPane.rowIndex="0"/>
+                                        <Label fx:id="lblMetaDetalle" styleClass="subtitulo" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                        <Label styleClass="ayuda" text="Tipo" GridPane.rowIndex="1"/>
+                                        <Label fx:id="lblTipo" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                        <Label styleClass="ayuda" text="Código" GridPane.rowIndex="2"/>
+                                        <Label fx:id="lblCodigo" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                        <Label styleClass="ayuda" text="Creado" GridPane.rowIndex="3"/>
+                                        <Label fx:id="lblCreado" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        <Label styleClass="ayuda" text="Estado" GridPane.rowIndex="4"/>
+                                        <Label fx:id="lblEstado" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                    </children>
+                                </GridPane>
+                                <Label styleClass="subtitulo" text="Ahorro programado"/>
+                                <VBox fx:id="listaProgramadas" spacing="6"/>
+                                <Button onAction="#programarAhorro" text="Programar ahorro para este bolsillo"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+                <Tab text="Movimientos">
+                    <content>
+                        <TableView fx:id="tabla">
+                            <columns>
+                                <TableColumn fx:id="colFecha" prefWidth="130" text="Fecha"/>
+                                <TableColumn fx:id="colDetalle" prefWidth="280" text="Detalle"/>
+                                <TableColumn fx:id="colValor" prefWidth="130" text="Valor"/>
+                                <TableColumn fx:id="colEstado" prefWidth="100" text="Estado"/>
+                            </columns>
+                        </TableView>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>

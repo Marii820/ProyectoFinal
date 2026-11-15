@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Tarjeta de UN bolsillo (billetera). Al darle clic se abre el bolsillo. -->
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.TarjetaBilleteraController"
+      fx:id="raiz" onMouseClicked="#abrir" prefWidth="240" spacing="6"
+      styleClass="tarjeta,tarjeta-billetera,tarjeta-click" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
+    <children>
+        <HBox>
+            <children>
+                <Label fx:id="lblNombre" styleClass="tarjeta-nombre" text="Nombre"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label styleClass="ayuda" text="›"/>
+            </children>
+        </HBox>
+        <Label fx:id="lblTipo" styleClass="ayuda" text="Tipo"/>
+        <Label fx:id="lblSaldo" styleClass="tarjeta-saldo" text="\$0"/>
+        <ProgressBar fx:id="barraMeta" maxWidth="Infinity" progress="0.0"/>
+        <Label fx:id="lblMeta" styleClass="ayuda" text="Meta"/>
+    </children>
+</VBox>

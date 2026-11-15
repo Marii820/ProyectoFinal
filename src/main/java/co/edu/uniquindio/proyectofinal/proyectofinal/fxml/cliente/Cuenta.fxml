@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- "Mi cuenta": el Disponible y sus bolsillos. Aquí NO se muestran transferencias, solo los bolsillos. -->
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.CuentaController"
+            fitToWidth="true" stylesheets="@../../estilos.css">
+    <content>
+        <VBox spacing="16">
+            <padding>
+                <Insets top="20" right="24" bottom="24" left="24"/>
+            </padding>
+            <children>
+                <Button onAction="#volver" styleClass="boton-volver" text="‹  Volver"/>
+                <Label styleClass="titulo-grande" text="Mi cuenta"/>
+
+                <VBox spacing="4" styleClass="tarjeta">
+                    <padding>
+                        <Insets top="18" right="20" bottom="18" left="20"/>
+                    </padding>
+                    <children>
+                        <Label fx:id="lblNumero" styleClass="ayuda" text="Cuenta"/>
+                        <Label styleClass="ayuda" text="Saldo disponible"/>
+                        <Label fx:id="lblSaldo" styleClass="saldo-cuenta" text="\$0"/>
+                        <Label fx:id="lblEnBolsillos" styleClass="ayuda" text="En bolsillos: $0"/>
+                    </children>
+                </VBox>
+
+                <HBox spacing="12">
+                    <children>
+                        <Button onAction="#irTransferir" styleClass="accion-grande" text="Transferir plata"/>
+                        <Button onAction="#irRecargar" styleClass="accion-grande" text="Recargar"/>
+                        <Button onAction="#irCargar" styleClass="accion-grande" text="Cargar un bolsillo"/>
+                    </children>
+                </HBox>
+
+                <Label styleClass="subtitulo" text="Tus bolsillos"/>
+                <Label styleClass="ayuda" wrapText="true"
+                       text="Los bolsillos (billeteras) sirven para separar tu plata. Lo que cargas a un bolsillo sale de tu saldo disponible. Dale clic a uno para verlo, cargarlo o sacarle plata."/>
+                <FlowPane fx:id="bolsillos" hgap="16" prefWrapLength="900" vgap="16"/>
+                <Label fx:id="lblSinBolsillos" styleClass="ayuda" text="Todavía no tienes bolsillos."/>
+
+                <VBox spacing="10" styleClass="tarjeta">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="subtitulo" text="Crear un bolsillo"/>
+                        <GridPane hgap="12" vgap="10">
+                            <children>
+                                <Label text="Nombre:" GridPane.rowIndex="0"/>
+                                <TextField fx:id="txtNombre" prefWidth="240" promptText="Ej: Moto nueva" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Tipo:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <ComboBox fx:id="cbTipo" prefWidth="180" promptText="Tipo" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                <Label text="Meta de ahorro:" GridPane.rowIndex="1"/>
+                                <TextField fx:id="txtMeta" prefWidth="240" promptText="Opcional, ej: 4.000.000" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Button onAction="#crear" styleClass="primario" text="Crear bolsillo" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </content>
+</ScrollPane>

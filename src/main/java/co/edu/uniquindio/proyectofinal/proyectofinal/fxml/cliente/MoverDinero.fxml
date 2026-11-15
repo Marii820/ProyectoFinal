@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.MoverDineroController"
+      spacing="14" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <Label styleClass="titulo" text="Transferir y recargar"/>
+        <Label fx:id="lblDisponible" styleClass="subtitulo" text="Disponible: $0"/>
+        <Label styleClass="ayuda" wrapText="true"
+               text="Puntos: recarga 1, retiro 2 y transferencia 3 puntos por cada $1.000. Los retiros y los envíos a otras personas tienen comisión según tu nivel (Bronce 1%, Plata 0,5%, Oro 0,25%, Platino 0%)."/>
+
+        <TabPane fx:id="pestanas" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <!-- ===== Enviar a otra persona ===== -->
+                <Tab fx:id="tabEnviar" text="Enviar a otra persona">
+                    <content>
+                        <VBox styleClass="tarjeta">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            <children>
+                                <GridPane hgap="12" vgap="10">
+                                    <children>
+                                        <Label text="Para:" GridPane.rowIndex="0"/>
+                                        <HBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                            <children>
+                                                <TextField fx:id="txtDestinatario" prefWidth="260" promptText="Cédula, celular o correo"/>
+                                                <Button onAction="#verificarDestinatario" text="Buscar"/>
+                                            </children>
+                                        </HBox>
+                                        <Label fx:id="lblDestinatario" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                        <Label text="Desde:" GridPane.rowIndex="2"/>
+                                        <ComboBox fx:id="cbEnvOrigen" prefWidth="260" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                        <Label text="Valor:" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="txtEnvValor" prefWidth="200" promptText="\$ valor" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                        <Label fx:id="lblEnvComision" styleClass="ayuda" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                        <Label text="Mensaje:" GridPane.rowIndex="5"/>
+                                        <TextField fx:id="txtEnvDesc" prefWidth="260" promptText="Ej: Almuerzo" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                                        <Button onAction="#enviar" styleClass="primario" text="Enviar" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                                    </children>
+                                </GridPane>
+                                <Label styleClass="ayuda" wrapText="true"
+                                       text="El dinero le llega a la cuenta (saldo disponible) de la otra persona. Nunca ves sus bolsillos. Para pasar plata a tus bolsillos usa Mi cuenta y bolsillos."/>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- ===== Recargar ===== -->
+                <Tab fx:id="tabRecargar" text="Recargar">
+                    <content>
+                        <VBox styleClass="tarjeta">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            <children>
+                                <GridPane hgap="12" vgap="10">
+                                    <children>
+                                        <Label text="Medio:" GridPane.rowIndex="0"/>
+                                        <ComboBox fx:id="cbMedio" prefWidth="260" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                        <Label text="A:" GridPane.rowIndex="1"/>
+                                        <Label text="Tu cuenta (saldo disponible)" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                        <Label text="Valor:" GridPane.rowIndex="2"/>
+                                        <TextField fx:id="txtRecValor" prefWidth="200" promptText="\$ valor" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                        <Button onAction="#recargar" styleClass="primario" text="Recargar" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <!-- ===== Retirar ===== -->
+                <Tab fx:id="tabRetirar" text="Retirar">
+                    <content>
+                        <VBox styleClass="tarjeta">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            <children>
+                                <GridPane hgap="12" vgap="10">
+                                    <children>
+                                        <Label text="Desde:" GridPane.rowIndex="0"/>
+                                        <Label text="Tu cuenta (saldo disponible)" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                        <Label text="Valor:" GridPane.rowIndex="1"/>
+                                        <TextField fx:id="txtRetValor" prefWidth="200" promptText="\$ valor" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                        <Label fx:id="lblRetComision" styleClass="ayuda" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                        <Button onAction="#retirar" styleClass="primario" text="Retirar" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>

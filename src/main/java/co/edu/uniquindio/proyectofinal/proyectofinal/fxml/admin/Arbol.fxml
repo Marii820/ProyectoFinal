@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.admin.ArbolController"
+      spacing="20" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <VBox spacing="12" HBox.hgrow="ALWAYS">
+            <children>
+                <Label styleClass="titulo" text="Árbol de usuarios por puntos"/>
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <children>
+                        <Label text="Puntos entre"/>
+                        <TextField fx:id="txtMin" prefWidth="70" promptText="mín"/>
+                        <Label text="y"/>
+                        <TextField fx:id="txtMax" prefWidth="70" promptText="máx"/>
+                        <Button onAction="#buscarRango" text="Buscar rango"/>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="6">
+                    <children>
+                        <ComboBox fx:id="cbNivel" promptText="Nivel"/>
+                        <Button onAction="#porNivel" text="Por nivel"/>
+                        <Button onAction="#rankingCompleto" text="Ranking completo"/>
+                    </children>
+                </HBox>
+                <Label fx:id="lblFiltro" styleClass="subtitulo"/>
+                <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPos" prefWidth="45" text="#"/>
+                        <TableColumn fx:id="colUsuario" prefWidth="230" text="Usuario"/>
+                        <TableColumn fx:id="colPuntos" prefWidth="90" text="Puntos"/>
+                        <TableColumn fx:id="colNivel" prefWidth="90" text="Nivel"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+        <VBox prefWidth="360" spacing="12">
+            <children>
+                <Label styleClass="subtitulo" text="Recorridos del árbol"/>
+                <ComboBox fx:id="cbRecorrido" prefWidth="260"/>
+                <ListView fx:id="lvRecorrido" VBox.vgrow="ALWAYS"/>
+                <Label fx:id="lblMedidas" wrapText="true"/>
+                <Label styleClass="ayuda" wrapText="true"
+                       text="Clave de cada nodo: (puntos, cédula). Cuando un usuario gana o pierde puntos se elimina su nodo y se inserta de nuevo. La búsqueda por rango poda las ramas que no pueden tener resultados: O(altura + k)."/>
+            </children>
+        </VBox>
+    </children>
+</HBox>

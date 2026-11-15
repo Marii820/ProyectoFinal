@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.admin.AdminController"
+            styleClass="app,admin" stylesheets="@../../estilos.css" prefWidth="1280" prefHeight="800">
+    <left>
+        <VBox prefWidth="210" spacing="4" styleClass="menu">
+            <padding>
+                <Insets top="20" right="12" bottom="20" left="12"/>
+            </padding>
+            <children>
+                <Label styleClass="logo-menu" text="QuindiPay"/>
+                <Label styleClass="rol-menu" text="Administración"/>
+                <Button fx:id="btnReportes" maxWidth="Infinity" onAction="#irReportes" styleClass="boton-menu" text="Reportes"/>
+                <Button fx:id="btnUsuarios" maxWidth="Infinity" onAction="#irUsuarios" styleClass="boton-menu" text="Usuarios"/>
+                <Button fx:id="btnArbol" maxWidth="Infinity" onAction="#irArbol" styleClass="boton-menu" text="Ranking (árbol)"/>
+                <Button fx:id="btnGrafo" maxWidth="Infinity" onAction="#irGrafo" styleClass="boton-menu" text="Grafo"/>
+                <Button fx:id="btnSeguridad" maxWidth="Infinity" onAction="#irSeguridad" styleClass="boton-menu" text="Seguridad"/>
+                <Button fx:id="btnProgramadas" maxWidth="Infinity" onAction="#irProgramadas" styleClass="boton-menu" text="Programadas"/>
+                <Button fx:id="btnRendimiento" maxWidth="Infinity" onAction="#irRendimiento" styleClass="boton-menu" text="Rendimiento"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Button maxWidth="Infinity" onAction="#cerrarSesion" styleClass="boton-salir" text="Cerrar sesión"/>
+            </children>
+        </VBox>
+    </left>
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="encabezado">
+            <padding>
+                <Insets top="14" right="24" bottom="14" left="24"/>
+            </padding>
+            <children>
+                <Label styleClass="saludo" text="Panel de administración"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblEstado" styleClass="ayuda"/>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <StackPane fx:id="contenido"/>
+    </center>
+</BorderPane>

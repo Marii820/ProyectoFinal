@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.acceso.RegistroController"
+           styleClass="fondo-acceso" stylesheets="@../estilos.css" prefWidth="1280" prefHeight="800">
+    <children>
+        <VBox maxHeight="-Infinity" maxWidth="470" spacing="12" styleClass="caja-acceso">
+            <padding>
+                <Insets top="32" right="32" bottom="32" left="32"/>
+            </padding>
+            <children>
+                <Label styleClass="logo-pequeno" text="QuindiPay"/>
+                <Label styleClass="titulo" text="Crea tu cuenta"/>
+                <GridPane hgap="12" vgap="10">
+                    <children>
+                        <Label text="Cédula" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtCedula" prefWidth="250" promptText="Ej: 1094888777" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="Nombre completo" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtNombre" promptText="Nombre y apellido" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Celular" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtCelular" promptText="10 dígitos" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Correo" GridPane.rowIndex="3"/>
+                        <TextField fx:id="txtCorreo" promptText="tucorreo@ejemplo.com" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label text="Contraseña" GridPane.rowIndex="4"/>
+                        <PasswordField fx:id="txtClave" promptText="Mínimo 6 caracteres" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        <Label text="Confirmar" GridPane.rowIndex="5"/>
+                        <PasswordField fx:id="txtClave2" promptText="Repite la contraseña" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    </children>
+                </GridPane>
+                <Label fx:id="lblError" styleClass="texto-error" wrapText="true"/>
+                <Button defaultButton="true" maxWidth="Infinity" onAction="#crear" styleClass="primario,boton-grande" text="Crear cuenta"/>
+                <HBox spacing="10">
+                    <children>
+                        <Hyperlink onAction="#volver" text="← Volver"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Hyperlink onAction="#irIngreso" text="¿Ya tienes cuenta? Ingresa"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

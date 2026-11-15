@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.admin.RendimientoController"
+      spacing="14" stylesheets="@../../estilos.css">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+    <children>
+        <Label styleClass="titulo" text="Comparación de rendimiento de estructuras"/>
+        <Label styleClass="ayuda" wrapText="true"
+               text="Se hace exactamente la misma operación, con los mismos datos aleatorios (semilla fija), sobre dos estructuras y se mide el tiempo con System.nanoTime(). Además se verifica que las dos den el mismo resultado. Los tiempos cambian un poco entre ejecuciones, pero la diferencia de orden se mantiene."/>
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <children>
+                <Label text="Cantidad de datos (n):"/>
+                <ComboBox fx:id="cbN"/>
+                <Button onAction="#ejecutar" styleClass="primario" text="Ejecutar comparación"/>
+            </children>
+        </HBox>
+        <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <children>
+                <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colOperacion" prefWidth="260" text="Operación"/>
+                        <TableColumn fx:id="colEstrA" prefWidth="170" text="Estructura A"/>
+                        <TableColumn fx:id="colCompA" prefWidth="110" text="Complejidad A"/>
+                        <TableColumn fx:id="colMsA" prefWidth="95" text="Tiempo A (ms)"/>
+                        <TableColumn fx:id="colEstrB" prefWidth="190" text="Estructura B"/>
+                        <TableColumn fx:id="colCompB" prefWidth="100" text="Complejidad B"/>
+                        <TableColumn fx:id="colMsB" prefWidth="95" text="Tiempo B (ms)"/>
+                        <TableColumn fx:id="colMejora" prefWidth="110" text="A es más rápida"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
+</VBox>

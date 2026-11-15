@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- 4.9: consulta posterior de los eventos de actividad inusual detectados en MI cuenta -->
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.SeguridadClienteController"
+      spacing="14" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <Label styleClass="titulo" text="Seguridad"/>
+        <Label styleClass="ayuda" wrapText="true"
+               text="Aquí quedan guardados los movimientos tuyos que nos parecieron raros: muchos envíos seguidos, un envío mucho más grande de lo normal, varios envíos a la misma persona en poco tiempo, sacar plata de varios bolsillos al mismo tiempo para partir una suma grande en pedacitos, muchas salidas de dinero en una hora o movimientos de madrugada. Las recargas y lo que pasas entre tus bolsillos no se revisan, porque es tu propia plata."/>
+        <HBox spacing="16">
+            <children>
+                <VBox spacing="4" styleClass="tarjeta">
+                    <padding><Insets top="14" right="18" bottom="14" left="18"/></padding>
+                    <children>
+                        <Label styleClass="ayuda" text="Eventos detectados"/>
+                        <Label fx:id="lblTotal" styleClass="kpi" text="0"/>
+                    </children>
+                </VBox>
+                <VBox spacing="4" styleClass="tarjeta">
+                    <padding><Insets top="14" right="18" bottom="14" left="18"/></padding>
+                    <children>
+                        <Label styleClass="ayuda" text="De riesgo alto"/>
+                        <Label fx:id="lblAltos" styleClass="kpi" text="0"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <children>
+                <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colFecha" prefWidth="125" text="Fecha"/>
+                        <TableColumn fx:id="colOperacion" prefWidth="230" text="Operación"/>
+                        <TableColumn fx:id="colRiesgo" prefWidth="80" text="Riesgo"/>
+                        <TableColumn fx:id="colPatron" prefWidth="180" text="Qué notamos"/>
+                        <TableColumn fx:id="colDescripcion" prefWidth="360" text="Detalle"/>
+                    </columns>
+                </TableView>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <Button onAction="#noFuiYo" styleClass="peligro" text="No fui yo: revertir esa operación"/>
+                        <Label styleClass="ayuda" text="Si no reconoces un movimiento, reviértelo y cambia tu contraseña en Mi perfil."/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>

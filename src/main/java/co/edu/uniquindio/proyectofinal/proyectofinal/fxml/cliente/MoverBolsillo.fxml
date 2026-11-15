@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Cargar un bolsillo (o sacarle plata). Desde ↓ Hacia, y "¿Cuánto vas a cargar?". -->
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.MoverBolsilloController"
+      maxWidth="640" spacing="14" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="20" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <Button onAction="#volver" styleClass="boton-volver" text="‹  Volver"/>
+        <Label fx:id="lblTitulo" styleClass="titulo-grande" text="Cargar bolsillo"/>
+
+        <!-- ¿De dónde saldrá la plata? (solo al cargar) -->
+        <VBox fx:id="cajaOrigen" spacing="8">
+            <children>
+                <Label styleClass="subtitulo" text="¿De dónde saldrá la plata?"/>
+                <Button fx:id="btnDesdeCuenta" maxWidth="Infinity" onAction="#elegirDesdeCuenta" styleClass="opcion-grande" text="Desde tu cuenta  ›"/>
+                <Button fx:id="btnDesdeBolsillo" maxWidth="Infinity" onAction="#elegirDesdeBolsillo" styleClass="opcion-grande" text="Desde un bolsillo  ›"/>
+            </children>
+        </VBox>
+
+        <VBox spacing="0" styleClass="tarjeta">
+            <children>
+                <VBox spacing="4">
+                    <padding>
+                        <Insets top="16" right="18" bottom="12" left="18"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="subtitulo" text="Desde:"/>
+                        <ComboBox fx:id="cbDesde" prefWidth="320"/>
+                        <Label fx:id="lblSaldoDesde" styleClass="saldo-mediano" text="\$0"/>
+                    </children>
+                </VBox>
+                <StackPane>
+                    <children>
+                        <Label styleClass="flecha-circulo" text="↓"/>
+                    </children>
+                </StackPane>
+                <VBox spacing="4">
+                    <padding>
+                        <Insets top="12" right="18" bottom="16" left="18"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="subtitulo" text="Hacia:"/>
+                        <ComboBox fx:id="cbHacia" prefWidth="320"/>
+                        <Label fx:id="lblSaldoHacia" styleClass="saldo-mediano" text="\$0"/>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+
+        <Label fx:id="lblPregunta" styleClass="subtitulo" text="¿Cuánto vas a cargar?"/>
+        <VBox spacing="10" styleClass="tarjeta">
+            <padding>
+                <Insets top="16" right="18" bottom="16" left="18"/>
+            </padding>
+            <children>
+                <RadioButton fx:id="rbTodo" text="Todo el saldo"/>
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <children>
+                        <RadioButton fx:id="rbOtro" text="Otro valor"/>
+                        <TextField fx:id="txtValor" prefWidth="200" promptText="\$ valor"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <Button fx:id="btnConfirmar" maxWidth="Infinity" onAction="#confirmar" styleClass="primario,boton-grande" text="Cargar"/>
+    </children>
+</VBox>

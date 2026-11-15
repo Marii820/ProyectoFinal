@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.PerfilController"
+      spacing="16" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <Label styleClass="titulo" text="Mi perfil"/>
+        <HBox spacing="16">
+            <children>
+                <VBox spacing="12" styleClass="tarjeta">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="subtitulo" text="Datos personales"/>
+                        <GridPane hgap="12" vgap="10">
+                            <children>
+                                <Label text="Cédula:" GridPane.rowIndex="0"/>
+                                <Label fx:id="lblCedula" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Cliente desde:" GridPane.rowIndex="1"/>
+                                <Label fx:id="lblDesde" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Nombre:" GridPane.rowIndex="2"/>
+                                <TextField fx:id="txtNombre" prefWidth="260" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label text="Celular:" GridPane.rowIndex="3"/>
+                                <TextField fx:id="txtCelular" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <Label text="Correo:" GridPane.rowIndex="4"/>
+                                <TextField fx:id="txtCorreo" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                            </children>
+                        </GridPane>
+                        <Button onAction="#guardarDatos" styleClass="primario" text="Guardar cambios"/>
+                    </children>
+                </VBox>
+                <VBox spacing="12" styleClass="tarjeta">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <children>
+                        <Label styleClass="subtitulo" text="Seguridad"/>
+                        <GridPane hgap="12" vgap="10">
+                            <children>
+                                <Label text="Contraseña actual:" GridPane.rowIndex="0"/>
+                                <PasswordField fx:id="pfActual" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label text="Nueva contraseña:" GridPane.rowIndex="1"/>
+                                <PasswordField fx:id="pfNueva" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label text="Confirmar:" GridPane.rowIndex="2"/>
+                                <PasswordField fx:id="pfConfirmar" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            </children>
+                        </GridPane>
+                        <Button onAction="#cambiarClave" text="Cambiar contraseña"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <VBox spacing="10" styleClass="tarjeta">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <children>
+                <Label styleClass="subtitulo" text="Cerrar cuenta"/>
+                <Label styleClass="ayuda" text="Para cerrar la cuenta tu Disponible y todas tus billeteras deben estar en $0."/>
+                <HBox spacing="10">
+                    <children>
+                        <PasswordField fx:id="pfCierre" promptText="Tu contraseña"/>
+                        <Button onAction="#cerrarCuenta" styleClass="peligro" text="Cerrar mi cuenta"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>

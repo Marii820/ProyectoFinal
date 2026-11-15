@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.proyectofinal.proyectofinal.vista.cliente.MovimientosController"
+      spacing="16" stylesheets="@../../estilos.css">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    <children>
+        <Label styleClass="titulo" text="Movimientos y reversiones"/>
+
+        <!-- ===== Revertir (pila de operaciones reversibles) ===== -->
+        <VBox spacing="8" styleClass="tarjeta,tarjeta-revertir">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <children>
+                <Label styleClass="subtitulo" text="¿Te equivocaste? Revierte un movimiento"/>
+                <Label fx:id="lblAyudaReversion" styleClass="ayuda" wrapText="true"/>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <Button onAction="#deshacer" styleClass="peligro" text="Deshacer el último"/>
+                        <Button onAction="#revertirSeleccionada" text="Revertir el que seleccione en la tabla"/>
+                    </children>
+                </HBox>
+                <Label fx:id="lblTope" styleClass="ayuda"/>
+            </children>
+        </VBox>
+
+        <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <Label styleClass="subtitulo" text="Historial"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Ver:"/>
+                        <ComboBox fx:id="cbCuenta" prefWidth="260"/>
+                    </children>
+                </HBox>
+                <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colFecha" prefWidth="125" text="Fecha"/>
+                        <TableColumn fx:id="colTipo" prefWidth="160" text="Movimiento"/>
+                        <TableColumn fx:id="colDetalle" prefWidth="240" text="Detalle"/>
+                        <TableColumn fx:id="colValor" prefWidth="120" text="Valor"/>
+                        <TableColumn fx:id="colComision" prefWidth="80" text="Comisión"/>
+                        <TableColumn fx:id="colEstado" prefWidth="90" text="Estado"/>
+                        <TableColumn fx:id="colPuntos" prefWidth="65" text="Puntos"/>
+                        <TableColumn fx:id="colRevertible" prefWidth="130" text="¿Se puede revertir?"/>
+                        <TableColumn fx:id="colId" prefWidth="95" text="Comprobante"/>
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+
+        <VBox spacing="10" styleClass="tarjeta">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            <children>
+                <Label styleClass="subtitulo" text="Mi actividad en un período"/>
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <children>
+                        <Label text="Desde"/>
+                        <DatePicker fx:id="dpDesde"/>
+                        <Label text="hasta"/>
+                        <DatePicker fx:id="dpHasta"/>
+                        <Button onAction="#verResumen" text="Ver resumen"/>
+                    </children>
+                </HBox>
+                <TableView fx:id="tablaResumen" prefHeight="170">
+                    <columns>
+                        <TableColumn fx:id="colResTipo" prefWidth="220" text="Tipo de movimiento"/>
+                        <TableColumn fx:id="colResCantidad" prefWidth="90" text="Cantidad"/>
+                        <TableColumn fx:id="colResMonto" prefWidth="140" text="Monto"/>
+                    </columns>
+                </TableView>
+                <Label fx:id="lblTotales" styleClass="subtitulo"/>
+            </children>
+        </VBox>
+    </children>
+</VBox>
