@@ -14,7 +14,7 @@
 
 /* ---------- pantallas de acceso ---------- */
 .fondo-acceso {
-    -fx-background-color: linear-gradient(to bottom right, #14213d, #2f5bd3);
+    -fx-background-color: linear-gradient(to bottom right, #3d1435, #c689de);
 }
 .caja-acceso {
     -fx-background-color: white;
@@ -29,7 +29,7 @@
 .logo-pequeno {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2f5bd3;
+    -fx-text-fill: #c689de;
 }
 .eslogan {
     -fx-font-size: 14px;
@@ -68,7 +68,7 @@
 }
 .boton-menu:hover { -fx-background-color: rgba(255,255,255,0.08); }
 .boton-menu.activo {
-    -fx-background-color: #2f5bd3;
+    -fx-background-color: #c689de;
     -fx-text-fill: white;
 }
 .boton-salir {
@@ -131,7 +131,7 @@
 }
 
 .banner-saldo {
-    -fx-background-color: linear-gradient(to right, #2f5bd3, #14213d);
+    -fx-background-color: linear-gradient(to right, #c689de, #14213d);
     -fx-background-radius: 16;
 }
 .saldo-grande {
@@ -141,7 +141,7 @@
 }
 
 .tarjeta-billetera {
-    -fx-border-color: transparent transparent transparent #2f5bd3;
+    -fx-border-color: transparent transparent transparent #c689de;
     -fx-border-width: 0 0 0 5;
     -fx-border-radius: 12;
 }
@@ -161,15 +161,15 @@
     -fx-padding: 7 14 7 14;
 }
 .button.primario {
-    -fx-background-color: #2f5bd3;
+    -fx-background-color: #c689de;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 .button.primario:hover { -fx-background-color: #2549ad; }
 .button.secundario {
     -fx-background-color: white;
-    -fx-text-fill: #2f5bd3;
-    -fx-border-color: #2f5bd3;
+    -fx-text-fill: #c689de;
+    -fx-border-color: #c689de;
     -fx-border-radius: 8;
     -fx-font-weight: bold;
 }
@@ -200,7 +200,7 @@
 .table-row-cell.fila-riesgo { -fx-background-color: #fff3cd; }
 .table-row-cell.fila-rechazada:selected,
 .table-row-cell.fila-revertida:selected,
-.table-row-cell.fila-riesgo:selected { -fx-background-color: #2f5bd3; }
+.table-row-cell.fila-riesgo:selected { -fx-background-color: #c689de; }
 
 .monto-entra { -fx-text-fill: #1d8a55; -fx-font-weight: bold; }
 .monto-sale { -fx-text-fill: #c0392b; }
@@ -210,7 +210,7 @@
 .list-cell:selected { -fx-text-fill: white; }
 
 .tab-pane .tab { -fx-padding: 6 16 6 16; }
-.progress-bar .bar { -fx-background-color: #2f5bd3; }
+.progress-bar .bar { -fx-background-color: #c689de; }
 
 .menu-button.boton-mini {
     -fx-font-size: 11px;
@@ -244,7 +244,7 @@
     -fx-font-size: 15px;
     -fx-padding: 4 0 4 0;
 }
-.boton-volver:hover { -fx-text-fill: #2f5bd3; }
+.boton-volver:hover { -fx-text-fill: #c689de; }
 .boton-editar, .menu-button.boton-editar {
     -fx-background-color: white;
     -fx-background-radius: 20;
@@ -262,7 +262,7 @@
 }
 .button.accion-grande:hover { -fx-background-color: #eef2ff; }
 .button.accion-grande.primario {
-    -fx-background-color: #2f5bd3;
+    -fx-background-color: #c689de;
     -fx-text-fill: white;
 }
 .button.opcion-grande {
