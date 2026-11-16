@@ -1,0 +1,297 @@
+/* ===== Paleta =====
+   azul oscuro  #14213d   (menú)
+   azul         #2f5bd3   (acciones principales)
+   verde        #1d8a55   (dinero que entra)
+   rojo         #c0392b   (dinero que sale / peligro)
+   fondo        #f3f5fa
+*/
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f3f5fa;
+}
+
+/* ---------- pantallas de acceso ---------- */
+.fondo-acceso {
+    -fx-background-color: linear-gradient(to bottom right, #14213d, #2f5bd3);
+}
+.caja-acceso {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 24, 0, 0, 6);
+}
+.logo {
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.logo-pequeno {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2f5bd3;
+}
+.eslogan {
+    -fx-font-size: 14px;
+    -fx-text-fill: #5f6b85;
+    -fx-text-alignment: center;
+}
+.boton-grande {
+    -fx-font-size: 15px;
+    -fx-padding: 10 20 10 20;
+}
+.texto-error { -fx-text-fill: #c0392b; }
+.texto-ok { -fx-text-fill: #1d8a55; -fx-font-weight: bold; }
+
+/* ---------- app ---------- */
+.menu {
+    -fx-background-color: #14213d;
+}
+.logo-menu {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 8 18 8;
+}
+.rol-menu {
+    -fx-text-fill: #f2b266;
+    -fx-padding: 0 8 14 8;
+}
+.boton-menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b8c2dc;
+    -fx-alignment: center-left;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.boton-menu:hover { -fx-background-color: rgba(255,255,255,0.08); }
+.boton-menu.activo {
+    -fx-background-color: #2f5bd3;
+    -fx-text-fill: white;
+}
+.boton-salir {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff9b8f;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.encabezado {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e3e7f0 transparent;
+}
+.saludo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.chip-puntos, .chip-nivel {
+    -fx-padding: 4 12 4 12;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+.chip-puntos { -fx-background-color: #fff1dc; -fx-text-fill: #b45f06; }
+.chip-nivel.BRONCE, .nivel-grande.BRONCE { -fx-background-color: #f1dfcf; -fx-text-fill: #8a4b1c; }
+.chip-nivel.PLATA, .nivel-grande.PLATA { -fx-background-color: #e6e9ef; -fx-text-fill: #4a5568; }
+.chip-nivel.ORO, .nivel-grande.ORO { -fx-background-color: #fff3c4; -fx-text-fill: #8a6d00; }
+.chip-nivel.PLATINO, .nivel-grande.PLATINO { -fx-background-color: #e3e8ff; -fx-text-fill: #2a3a8f; }
+.nivel-grande {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 10;
+}
+
+.titulo {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.subtitulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #26324f;
+}
+.ayuda { -fx-text-fill: #6b7690; }
+.ayuda-clara { -fx-text-fill: #d6def5; }
+.kpi {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+
+.tarjeta {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(20,33,61,0.10), 12, 0, 0, 3);
+}
+
+.banner-saldo {
+    -fx-background-color: linear-gradient(to right, #2f5bd3, #14213d);
+    -fx-background-radius: 16;
+}
+.saldo-grande {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tarjeta-billetera {
+    -fx-border-color: transparent transparent transparent #2f5bd3;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-radius: 12;
+}
+.tarjeta-billetera.tipo-AHORRO { -fx-border-color: #1d8a55; }
+.tarjeta-billetera.tipo-COMPRAS { -fx-border-color: #c2185b; }
+.tarjeta-billetera.tipo-TRANSPORTE { -fx-border-color: #f2a516; }
+.tarjeta-billetera.tipo-INVERSION { -fx-border-color: #6a3fd1; }
+.tarjeta-billetera.tipo-SUSCRIPCIONES { -fx-border-color: #0e9aa7; }
+.tarjeta-billetera.bloqueada { -fx-opacity: 0.6; }
+.tarjeta-nombre { -fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #14213d; }
+.tarjeta-saldo { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #14213d; }
+
+/* ---------- botones ---------- */
+.button {
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 7 14 7 14;
+}
+.button.primario {
+    -fx-background-color: #2f5bd3;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.button.primario:hover { -fx-background-color: #2549ad; }
+.button.secundario {
+    -fx-background-color: white;
+    -fx-text-fill: #2f5bd3;
+    -fx-border-color: #2f5bd3;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+}
+.button.peligro {
+    -fx-background-color: #c0392b;
+    -fx-text-fill: white;
+}
+.button.peligro:hover { -fx-background-color: #a32f23; }
+.button.boton-claro {
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-text-fill: white;
+    -fx-border-color: rgba(255,255,255,0.4);
+    -fx-border-radius: 8;
+}
+.button.boton-mini {
+    -fx-font-size: 11px;
+    -fx-padding: 3 8 3 8;
+}
+.button.peligro-texto { -fx-text-fill: #c0392b; }
+
+/* ---------- tablas y listas ---------- */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+}
+.table-row-cell.fila-rechazada { -fx-background-color: #fde3df; }
+.table-row-cell.fila-revertida { -fx-background-color: #eceef2; }
+.table-row-cell.fila-riesgo { -fx-background-color: #fff3cd; }
+.table-row-cell.fila-rechazada:selected,
+.table-row-cell.fila-revertida:selected,
+.table-row-cell.fila-riesgo:selected { -fx-background-color: #2f5bd3; }
+
+.monto-entra { -fx-text-fill: #1d8a55; -fx-font-weight: bold; }
+.monto-sale { -fx-text-fill: #c0392b; }
+
+.list-cell.notif-alerta { -fx-text-fill: #a32f23; }
+.list-cell.notif-nueva { -fx-font-weight: bold; }
+.list-cell:selected { -fx-text-fill: white; }
+
+.tab-pane .tab { -fx-padding: 6 16 6 16; }
+.progress-bar .bar { -fx-background-color: #2f5bd3; }
+
+.menu-button.boton-mini {
+    -fx-font-size: 11px;
+    -fx-padding: 1 4 1 4;
+    -fx-background-radius: 8;
+}
+.tarjeta-billetera .menu-button { -fx-cursor: hand; }
+
+/* ---------- Mi cuenta / bolsillos ---------- */
+.tarjeta-click { -fx-cursor: hand; }
+.tarjeta.tarjeta-click:hover { -fx-effect: dropshadow(gaussian, rgba(47,91,211,0.35), 16, 0, 0, 4); }
+.banner-saldo.tarjeta-click:hover { -fx-opacity: 0.95; }
+.titulo-grande {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.saldo-cuenta {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.saldo-mediano {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #14213d;
+}
+.boton-volver {
+    -fx-background-color: transparent;
+    -fx-text-fill: #26324f;
+    -fx-font-size: 15px;
+    -fx-padding: 4 0 4 0;
+}
+.boton-volver:hover { -fx-text-fill: #2f5bd3; }
+.boton-editar, .menu-button.boton-editar {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-color: #d5dae6;
+    -fx-border-radius: 20;
+    -fx-padding: 4 12 4 12;
+}
+.button.accion-grande {
+    -fx-background-color: white;
+    -fx-text-fill: #14213d;
+    -fx-font-size: 14px;
+    -fx-padding: 14 22 14 22;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(20,33,61,0.10), 10, 0, 0, 2);
+}
+.button.accion-grande:hover { -fx-background-color: #eef2ff; }
+.button.accion-grande.primario {
+    -fx-background-color: #2f5bd3;
+    -fx-text-fill: white;
+}
+.button.opcion-grande {
+    -fx-background-color: white;
+    -fx-alignment: center-left;
+    -fx-font-size: 15px;
+    -fx-padding: 14 18 14 18;
+    -fx-background-radius: 12;
+    -fx-border-color: transparent;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(20,33,61,0.08), 8, 0, 0, 2);
+}
+.button.opcion-grande.elegida {
+    -fx-border-color: #2f5bd3;
+    -fx-background-color: #eef2ff;
+}
+.flecha-circulo {
+    -fx-font-size: 18px;
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-color: #e3e7f0;
+    -fx-border-radius: 20;
+    -fx-border-width: 3;
+    -fx-padding: 4 12 4 12;
+}
+
+.tarjeta-revertir {
+    -fx-border-color: transparent transparent transparent #c0392b;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-radius: 12;
+}
