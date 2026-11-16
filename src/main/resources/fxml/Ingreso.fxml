@@ -20,7 +20,7 @@
                 <Insets top="36" right="36" bottom="36" left="36"/>
             </padding>
             <children>
-                <Label styleClass="logo-pequeno" text="QuindiPay"/>
+                <Label styleClass="logo-pequeno" text="MaruiPay"/>
                 <Label styleClass="titulo" text="Ingresa a tu cuenta"/>
                 <Label text="Cédula, celular o correo"/>
                 <TextField fx:id="txtUsuario" promptText="Ej: 1094000001"/>

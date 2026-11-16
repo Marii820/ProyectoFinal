@@ -18,7 +18,7 @@
                 <Insets top="20" right="12" bottom="20" left="12"/>
             </padding>
             <children>
-                <Label styleClass="logo-menu" text="QuindiPay"/>
+                <Label styleClass="logo-menu" text="MaruiPay"/>
                 <Button fx:id="btnInicio" maxWidth="Infinity" onAction="#irInicio" styleClass="boton-menu" text="Inicio"/>
                 <Button fx:id="btnCuenta" maxWidth="Infinity" onAction="#irCuenta" styleClass="boton-menu" text="Mi cuenta y bolsillos"/>
                 <Button fx:id="btnMover" maxWidth="Infinity" onAction="#irMover" styleClass="boton-menu" text="Transferir y recargar"/>

@@ -15,7 +15,7 @@
                 <Insets top="40" right="40" bottom="40" left="40"/>
             </padding>
             <children>
-                <Label styleClass="logo" text="QuindiPay"/>
+                <Label styleClass="logo" text="MaruiPay"/>
                 <Label styleClass="eslogan" text="Tu plata organizada: un Disponible para el día a día y billeteras para separar lo que quieras." wrapText="true"/>
                 <Button defaultButton="true" maxWidth="Infinity" onAction="#ingresar" styleClass="primario,boton-grande" text="Ingresar"/>
                 <Button maxWidth="Infinity" onAction="#registrarme" styleClass="secundario,boton-grande" text="Registrarme"/>

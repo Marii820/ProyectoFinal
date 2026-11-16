@@ -18,7 +18,7 @@
                 <Insets top="20" right="12" bottom="20" left="12"/>
             </padding>
             <children>
-                <Label styleClass="logo-menu" text="QuindiPay"/>
+                <Label styleClass="logo-menu" text="MaruiPay"/>
                 <Label styleClass="rol-menu" text="Administración"/>
                 <Button fx:id="btnReportes" maxWidth="Infinity" onAction="#irReportes" styleClass="boton-menu" text="Reportes"/>
                 <Button fx:id="btnUsuarios" maxWidth="Infinity" onAction="#irUsuarios" styleClass="boton-menu" text="Usuarios"/>
