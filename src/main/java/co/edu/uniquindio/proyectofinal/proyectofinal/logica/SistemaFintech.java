@@ -3,14 +3,15 @@ package co.edu.uniquindio.proyectofinal.proyectofinal.logica;
 import co.edu.uniquindio.proyectofinal.proyectofinal.Estructuras.*;
 import co.edu.uniquindio.proyectofinal.proyectofinal.model.*;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
-public class SistemaFintech {
+public class SistemaFintech implements Serializable {
 
-    private static final long serialVersionUID = 2L;
-    public static final int VERSION_DATOS = 2;
+    private static final long serialVersionUID = 3L;
+    public static final int VERSION_DATOS = 3;
     private final int versionDatos = VERSION_DATOS;
 
     public static final String ADMIN_USUARIO = "admin";
@@ -45,6 +46,13 @@ public class SistemaFintech {
     private final TablaHash<String, Double> configuracion = new TablaHash<>();
 
     public SistemaFintech() {
+        configuracion.put("umbralSaldoBajo", UMBRAL_SALDO_BAJO);
+        configuracion.put("bonoProgramada", (double) BONO_PROGRAMADA);
+        configuracion.put("ventanaReversionHoras", (double) VENTANA_REVERSION_HORAS);
+        configuracion.put("maxBilleteras", (double) MAX_BILLETERAS);
+        configuracion.put("pesosPorUnidad", PESOS_POR_UNIDAD);
+        configuracion.put("minutosRafaga", 5.0);
+        configuracion.put("factorMontoAlto", 3.0);
         catalogoBeneficios.addLast(new Beneficio("B1", "Café gratis", "Un café en tiendas aliadas", 150, NivelUsuario.BRONCE));
         catalogoBeneficios.addLast(new Beneficio("B2", "Cine 2x1", "Dos boletas por el precio de una", 400, NivelUsuario.BRONCE));
         catalogoBeneficios.addLast(new Beneficio("B3", "Bono de $20.000", "Bono para compras en comercios aliados", 800, NivelUsuario.PLATA));
@@ -115,7 +123,7 @@ public class SistemaFintech {
         Usuario d = buscarPorIdentificador(identificador);
         if (d == null) throw new IllegalArgumentException("No encontramos ninguna cuenta con \"" + limpiar(identificador) + "\"");
         if (d.getId().equals(idUsuarioQueEnvia))
-            throw new IllegalArgumentException("Ese es usted. Para mover plata entre sus billeteras use \"Entre mis cuentas\"");
+            throw new IllegalArgumentException("Ese es usted. Para pasar plata a sus bolsillos use \"Mi cuenta y bolsillos\"");
         return d;
     }
 
@@ -216,8 +224,8 @@ public class SistemaFintech {
         if (limpiar(nombre).isEmpty()) throw new IllegalArgumentException("Pongale un nombre a la billetera");
         if (tipo == null) throw new IllegalArgumentException("Seleccione el tipo de billetera");
         int max = (int) config("maxBilleteras");
-        if (u.getBilleteras().getSize() >= MAX_BILLETERAS)
-            throw new IllegalStateException("Maximo " + MAX_BILLETERAS + " billeteras por usuario");
+        if (u.getBilleteras().getSize() >= max)
+            throw new IllegalStateException("Máximo " + max + " bolsillos por usuario");
         String nom = limpiar(nombre);
         if (nom.equalsIgnoreCase("Disponible")) throw new IllegalArgumentException("Ese nombre está reservado para la cuenta principal");
         if (u.getBilleteras().buscar(b -> b.getNombre().equalsIgnoreCase(nom)) != null)
@@ -388,7 +396,7 @@ public class SistemaFintech {
 
         registrar(t);
         transaccionesPorValor.insertar(t);
-        actor.getOperacionesReversibles().push(t);
+        if (t.esReversible()) actor.getOperacionesReversibles().push(t);
 
         int puntos = calcularPuntos(t);
         t.setPuntosGenerados(puntos);
@@ -400,13 +408,14 @@ public class SistemaFintech {
             notificar(bd.getPropietario(), TipoNotificacion.DINERO_RECIBIDO, actor.getPrimerNombre() + " te envió $"
                     + fmt(t.getValor()) + " a tu Disponible" + (t.getDescripcion().isBlank() ? "" : " (" + t.getDescripcion() + ")"));
         }
-        if (bo != null && saldoAntes >= UMBRAL_SALDO_BAJO && bo.getSaldo() < UMBRAL_SALDO_BAJO) {
+        double umbral = config("umbralSaldoBajo");
+        if (bo != null && saldoAntes >= umbral && bo.getSaldo() < umbral) {
             notificar(actor, TipoNotificacion.SALDO_BAJO, "Tu " + (bo.esPrincipal() ? "Disponible" : "billetera " + bo.getNombre())
                     + " quedó con saldo bajo: $" + fmt(bo.getSaldo()));
         }
         if (t.isProgramada()) {
             notificar(actor, TipoNotificacion.PROGRAMADA_EJECUTADA, "Se ejecutó: " + t.getDescripcion()
-                    + " por $" + fmt(t.getValor()) + " (+" + puntos + " pts, incluye bono de " + BONO_PROGRAMADA + ")");
+                    + " por $" + fmt(t.getValor()) + (puntos > 0 ? " (+" + puntos + " pts, incluye bono de " + (int) config("bonoProgramada") + ")" : ""));
         }
         revisarDuplicada(t);
         detectarInusual(t);
@@ -431,9 +440,10 @@ public class SistemaFintech {
 
     /** Política 4.4: puntos por cada 100 según el tipo + bono del nivel + bono si fue programada. */
     public int calcularPuntos(Transaccion t) {
-        int base = (int) (t.getValor() / (100 * PESOS_POR_UNIDAD)) * t.getTipo().getPuntosPor100();
+        if (t.getTipo() == TipoTransaccion.TRANSFERENCIA_PROPIA) return 0;
+        int base = (int) (t.getValor() / (100 * config("pesosPorUnidad"))) * t.getTipo().getPuntosPor100();
         int conBono = (int) Math.round(base * (1 + t.getUsuario().getNivel().getBonoPuntos()));
-        return t.isProgramada() ? conBono + BONO_PROGRAMADA : conBono;
+        return t.isProgramada() ? conBono + (int) config("bonoProgramada") : conBono;
     }
 
     /** Cambia los puntos sin dañar el árbol: se saca la entrada vieja, se actualiza y se mete la nueva. */
@@ -451,6 +461,7 @@ public class SistemaFintech {
 
     /** Operación duplicada: mismo origen, destino y valor en menos de 2 minutos. */
     private void revisarDuplicada(Transaccion t) {
+        if (!t.esReversible()) return;
         for (Transaccion x : t.getUsuario().getHistorial()) {
             if (x == t || x.getEstado() != EstadoTransaccion.EXITOSA || x.getUsuario() != t.getUsuario()) continue;
             long seg = Duration.between(x.getFecha(), t.getFecha()).getSeconds();
@@ -492,7 +503,12 @@ public class SistemaFintech {
             aux.push(t);
         }
         try {
-            if (objetivo == null) throw new IllegalStateException("Esa operación no está en su historial de deshacer (ya se revirtió o no es suya)");
+            if (objetivo == null) {
+                Transaccion t = buscarTransaccion(idTransaccion);
+                if (t != null && t.getTipo() == TipoTransaccion.TRANSFERENCIA_PROPIA)
+                    throw new IllegalStateException("Los movimientos entre tus bolsillos no se revierten: simplemente pasa la plata de vuelta.");
+                throw new IllegalStateException("Esa operación no se puede revertir (ya se revirtió, fue rechazada o no la hizo usted)");
+            }
             validarReversion(objetivo);
             aplicarReversion(u, objetivo);
             return objetivo;
@@ -507,8 +523,9 @@ public class SistemaFintech {
 
     private void validarReversion(Transaccion t) {
         if (!t.esReversible()) throw new IllegalStateException("La operación " + t.getId() + " no se puede revertir (" + t.getEstado() + ")");
-        if (Duration.between(t.getFecha(), ahora()).toHours() >= VENTANA_REVERSION_HORAS)
-            throw new IllegalStateException("Solo se pueden revertir operaciones de las últimas " + VENTANA_REVERSION_HORAS + " horas");
+        int ventana = (int) config("ventanaReversionHoras");
+        if (Duration.between(t.getFecha(), ahora()).toHours() >= ventana)
+            throw new IllegalStateException("Solo se pueden revertir operaciones de las últimas " + ventana + " horas");
         if ((t.getOrigen() != null && !cuentas.containsKey(t.getOrigen().getCodigo()))
                 || (t.getDestino() != null && !cuentas.containsKey(t.getDestino().getCodigo())))
             throw new IllegalStateException("No se puede revertir: una de las cuentas ya fue eliminada");
@@ -551,6 +568,9 @@ public class SistemaFintech {
                                                   double valor, LocalDateTime fecha, Frecuencia frecuencia, String descripcion) {
         Usuario u = obtenerUsuario(idUsuario);
         if (tipo == null || frecuencia == null) throw new IllegalArgumentException("Seleccione el tipo y la frecuencia");
+        if (tipo == TipoTransaccion.TRANSFERENCIA_EXTERNA) tipo = TipoTransaccion.PAGO_PROGRAMADO;
+        if (!tipo.esProgramable())
+            throw new IllegalArgumentException("Las recargas y los retiros no se programan: necesitan que usted esté presente (PSE, tarjeta, cajero)");
         if (valor <= 0) throw new IllegalArgumentException("El valor debe ser mayor que $0");
         if (fecha == null || !fecha.isAfter(ahora())) throw new IllegalArgumentException("La fecha y hora deben ser futuras");
         Cuenta co = null, cd = null;
@@ -685,58 +705,58 @@ public class SistemaFintech {
 
 
     public Comportamiento detectarInusual(Transaccion t) {
+        if (!esSalidaReal(t)) return null;
         Usuario u = t.getUsuario();
         LocalDateTime f = t.getFecha();
-        boolean saliente = t.getTipo() != TipoTransaccion.RECARGA;
         int riesgo = 0;
         SimpleLinkedList<String> patrones = new SimpleLinkedList<>();
         SimpleLinkedList<String> detalles = new SimpleLinkedList<>();
+        int minRafaga = (int) config("minutosRafaga");
+        double factorAlto = config("factorMontoAlto");
 
-        int transferencias5min = 0, mismoDestino30min = 0, ultimaHora = 0, ultimos7dias = 0;
-        int salientesPrevias = 0, nocturnasPrevias = 0, previas = 0;
-        double sumaSalientes = 0;
+        int envios5min = 0, mismoDestino30min = 0, ultimaHora = 0, ultimos7dias = 0;
+        int salidasPrevias = 0, nocturnasPrevias = 0;
+        double sumaSalidas = 0;
         TablaHash<String, Boolean> origenes10min = new TablaHash<>();
 
         for (Transaccion x : u.getHistorial()) {
-            if (x.getUsuario() != u || x.getEstado() != EstadoTransaccion.EXITOSA) continue;
+            if (x.getUsuario() != u || x.getEstado() != EstadoTransaccion.EXITOSA || !esSalidaReal(x)) continue;
             long min = Duration.between(x.getFecha(), f).toMinutes();
             if (min < 0) continue;
-            if (x.getTipo().esTransferencia() && min <= 5) transferencias5min++;
+            if (x.getTipo().esHaciaOtraPersona() && min <= minRafaga) envios5min++;
             if (min <= 60) ultimaHora++;
             else if (min <= 7 * 24 * 60) ultimos7dias++;
-            if (min <= 10 && x.getOrigen() != null && x.getTipo() != TipoTransaccion.TRANSFERENCIA_PROPIA)
-                origenes10min.put(x.getOrigen().getCodigo(), true);
-            if (t.getDestino() != null && x.getDestino() == t.getDestino()
-                    && x.getTipo().esTransferencia() && min <= 30) mismoDestino30min++;
+            if (min <= 10 && x.getOrigen() != null) origenes10min.put(x.getOrigen().getCodigo(), true);
+            if (t.getDestino() != null && x.getDestino() == t.getDestino() && min <= 30) mismoDestino30min++;
             if (x != t) {
-                previas++;
+                salidasPrevias++;
+                sumaSalidas += x.getValor();
                 if (x.getFecha().getHour() < 5) nocturnasPrevias++;
-                if (x.getTipo() != TipoTransaccion.RECARGA) { salientesPrevias++; sumaSalientes += x.getValor(); }
             }
         }
 
-        if (t.getTipo().esTransferencia() && transferencias5min >= 3) {
+        if (t.getTipo().esHaciaOtraPersona() && envios5min >= 3) {
             riesgo += 2; patrones.addLast("RÁFAGA");
-            detalles.addLast(transferencias5min + " transferencias en menos de 5 minutos");
+            detalles.addLast(envios5min + " envíos a otras personas en menos de " + minRafaga + " minutos");
         }
-        if (saliente && salientesPrevias >= 3 && t.getValor() > 3 * (sumaSalientes / salientesPrevias)) {
+        if (salidasPrevias >= 3 && t.getValor() > factorAlto * (sumaSalidas / salidasPrevias)) {
             riesgo += 2; patrones.addLast("MONTO_ALTO");
-            detalles.addLast("$" + fmt(t.getValor()) + " es más de 3 veces su promedio ($" + fmt(sumaSalientes / salientesPrevias) + ")");
+            detalles.addLast("$" + fmt(t.getValor()) + " es más de " + (int) factorAlto + " veces lo que suele sacar ($" + fmt(sumaSalidas / salidasPrevias) + ")");
         }
         if (mismoDestino30min >= 3) {
             riesgo += 2; patrones.addLast("DESTINO_REPETIDO");
-            detalles.addLast(mismoDestino30min + " envíos a la misma billetera en 30 minutos");
+            detalles.addLast(mismoDestino30min + " envíos a la misma persona en 30 minutos");
         }
-        if (saliente && t.getTipo() != TipoTransaccion.TRANSFERENCIA_PROPIA && origenes10min.getSize() >= 3) {
+        if (origenes10min.getSize() >= 3) {
             riesgo += 2; patrones.addLast("FRAGMENTACIÓN");
-            detalles.addLast("salió dinero de " + origenes10min.getSize() + " billeteras distintas en 10 minutos");
+            detalles.addLast("sacó plata de " + origenes10min.getSize() + " bolsillos/cuentas distintos en 10 minutos");
         }
         double promedioHora = ultimos7dias / (7.0 * 24);
         if (ultimaHora >= 5 && ultimaHora > 4 * Math.max(promedioHora, 0.25)) {
             riesgo += 1; patrones.addLast("CAMBIO_FRECUENCIA");
-            detalles.addLast(ultimaHora + " operaciones en la última hora (su promedio es " + String.format("%.2f", promedioHora) + " por hora)");
+            detalles.addLast(ultimaHora + " salidas de dinero en la última hora (su promedio es " + String.format("%.2f", promedioHora) + " por hora)");
         }
-        if (f.getHour() < 5 && previas >= 5 && nocturnasPrevias * 10 < previas) {
+        if (f.getHour() < 5 && salidasPrevias >= 5 && nocturnasPrevias * 10 < salidasPrevias) {
             riesgo += 1; patrones.addLast("HORARIO_INUSUAL");
             detalles.addLast("operación a las " + f.toLocalTime().withSecond(0).withNano(0) + ", fuera de su horario habitual");
         }
@@ -899,10 +919,10 @@ public class SistemaFintech {
         Usuario vale = registrarUsuario("1094000004", "Valentina Ríos", "3209876543", "valentina@correo.com", "123456");
         Usuario camilo = registrarUsuario("1094000005", "Camilo Pérez", "3112223344", "camilo@correo.com", "123456");
 
-        Billetera anaA = crearBilletera(ana.getId(), "Ahorro viaje", TipoBilletera.AHORRO);
+        Billetera anaA = crearBilletera(ana.getId(), "Ahorro viaje", TipoBilletera.AHORRO, 1_500_000);
         Billetera anaT = crearBilletera(ana.getId(), "Transporte", TipoBilletera.TRANSPORTE);
         Billetera lauC = crearBilletera(laura.getId(), "Compras", TipoBilletera.COMPRAS);
-        Billetera sanI = crearBilletera(santi.getId(), "Inversiones", TipoBilletera.INVERSION);
+        Billetera sanI = crearBilletera(santi.getId(), "Inversiones", TipoBilletera.INVERSION, 1_000_000);
         Billetera valS = crearBilletera(vale.getId(), "Netflix y Spotify", TipoBilletera.SUSCRIPCIONES);
         crearBilletera(camilo.getId(), "Gastos de la U", TipoBilletera.GASTOS_DIARIOS);
 
@@ -938,8 +958,8 @@ public class SistemaFintech {
                 hoy.plusDays(3), Frecuencia.MENSUAL, "Arriendo compartido");
         programarOperacion(vale.getId(), TipoTransaccion.TRANSFERENCIA_PROPIA, null, valS.getCodigo(), 38_000,
                 hoy.plusDays(1), Frecuencia.MENSUAL, "Suscripciones del mes");
-        programarOperacion(santi.getId(), TipoTransaccion.RECARGA, null, null, 100_000,
-                hoy.plusDays(2), Frecuencia.UNICA, "Recarga de nómina");
+        programarOperacion(santi.getId(), TipoTransaccion.PAGO_PROGRAMADO, null, camilo.getTelefono(), 25_000,
+                hoy.plusDays(2), Frecuencia.SEMANAL, "Mesada de Camilo");
         despacharNotificaciones();
     }
 
@@ -961,8 +981,28 @@ public class SistemaFintech {
 
     public double config(String clave) {
         Double v = configuracion.get(clave);
-        if (v == null) throw new IllegalArgumentException("No existe el parámetro " + clave);
+        if (v == null) {
+            v = valorPorDefecto(clave);
+            configuracion.put(clave, v);
+        }
         return v;
+    }
+
+    private static double valorPorDefecto(String clave) {
+        return switch (clave) {
+            case "umbralSaldoBajo" -> UMBRAL_SALDO_BAJO;
+            case "bonoProgramada" -> BONO_PROGRAMADA;
+            case "ventanaReversionHoras" -> VENTANA_REVERSION_HORAS;
+            case "maxBilleteras" -> MAX_BILLETERAS;
+            case "pesosPorUnidad" -> PESOS_POR_UNIDAD;
+            case "minutosRafaga" -> 5;
+            case "factorMontoAlto" -> 3;
+            default -> throw new IllegalArgumentException("No existe el parámetro " + clave);
+        };
+    }
+
+    public int consultarPuntos(String idUsuario) {
+        return obtenerUsuario(idUsuario).getPuntosAcumulados();
     }
      public TablaHash<String, Double> getConfiguracion() { return configuracion; }
 
@@ -971,7 +1011,7 @@ public class SistemaFintech {
         return versionDatos == VERSION_DATOS && usuarios != null && usuariosPorCorreo != null && usuariosPorTelefono != null
                 && cuentas != null && transaccionesPorId != null && rankingPuntos != null && transaccionesPorValor != null
                 && programadas != null && notificacionesPendientes != null && grafoUsuarios != null && grafoCuentas != null
-                && transacciones != null && auditoria != null && catalogoBeneficios != null;
+                && transacciones != null && auditoria != null && catalogoBeneficios != null && configuracion != null;
     }
 
     public static String fmt(double v) { return String.format("%,.0f", v); }
