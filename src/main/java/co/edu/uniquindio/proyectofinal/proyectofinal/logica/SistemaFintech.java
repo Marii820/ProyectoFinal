@@ -40,6 +40,9 @@ public class SistemaFintech {
     private int seqTransaccion, seqBilletera, seqProgramada, seqNotificacion, seqAuditoria;
     private long notificacionesDespachadas;
     private long minutosSimulados; // reloj simulado (para probar las programadas sin esperar)
+    /* Se hace asi, poq se necesita esta tabla hash de config */
+
+    private final TablaHash<String, Double> configuracion = new TablaHash<>();
 
     public SistemaFintech() {
         catalogoBeneficios.addLast(new Beneficio("B1", "Café gratis", "Un café en tiendas aliadas", 150, NivelUsuario.BRONCE));
@@ -204,16 +207,24 @@ public class SistemaFintech {
     // =====================================================================
 
     public Billetera crearBilletera(String idUsuario, String nombre, TipoBilletera tipo) {
+        return crearBilletera(idUsuario, nombre, tipo, 0);
+    }
+
+
+    public Billetera crearBilletera(String idUsuario, String nombre, TipoBilletera tipo, double meta) {
         Usuario u = obtenerUsuario(idUsuario);
-        if (limpiar(nombre).isEmpty()) throw new IllegalArgumentException("Póngale un nombre a la billetera");
+        if (limpiar(nombre).isEmpty()) throw new IllegalArgumentException("Pongale un nombre a la billetera");
         if (tipo == null) throw new IllegalArgumentException("Seleccione el tipo de billetera");
+        int max = (int) config("maxBilleteras");
         if (u.getBilleteras().getSize() >= MAX_BILLETERAS)
-            throw new IllegalStateException("Máximo " + MAX_BILLETERAS + " billeteras por usuario");
+            throw new IllegalStateException("Maximo " + MAX_BILLETERAS + " billeteras por usuario");
         String nom = limpiar(nombre);
         if (nom.equalsIgnoreCase("Disponible")) throw new IllegalArgumentException("Ese nombre está reservado para la cuenta principal");
         if (u.getBilleteras().buscar(b -> b.getNombre().equalsIgnoreCase(nom)) != null)
             throw new IllegalArgumentException("Ya tiene una billetera llamada \"" + nom + "\"");
+        if (meta < 0) throw new IllegalArgumentException("La meta no puede ser negativa");
         Billetera b = new Billetera(String.format("BD%06d", ++seqBilletera), nom, tipo, u, ahora());
+        b.setMeta(meta);
         cuentas.put(b.getCodigo(), b);
         u.agregarBilletera(b);
         grafoCuentas.agregarVertice(b.getCodigo());
@@ -251,6 +262,15 @@ public class SistemaFintech {
         billeteraPropia(idUsuario, codigo).setNombre(nom);
     }
 
+    public void cambiarMetaBilletera(String idUsuario, String codigo, double meta) {
+        billeteraPropia(idUsuario, codigo).setMeta(meta);
+    }
+
+     /** Operaciones programadas que le meten plata a esa cuenta (ej: ahorro programado de un bolsillo). */
+    public SimpleLinkedList<OperacionProgramada> programadasHacia(String codigo) {
+        return programadas.enOrden().filtrar(op -> op.getDestino() != null && op.getDestino().getCodigo().equals(codigo));
+    }
+
     /** Pasa todo el saldo de la billetera al Disponible. */
     public Transaccion vaciarBilletera(String idUsuario, String codigo) {
         Billetera b = billeteraPropia(idUsuario, codigo);
@@ -273,6 +293,7 @@ public class SistemaFintech {
         if (c == null) throw new IllegalArgumentException("No existe la cuenta " + codigo);
         return c.getSaldo();
     }
+
 
     // =====================================================================
     // 4.2 / RF3: operaciones
@@ -661,6 +682,8 @@ public class SistemaFintech {
      * 1-2 = MEDIO, 3 o más = ALTO. Si hay riesgo: se marca la transacción, se guarda en auditoría
      * y se manda una alerta de seguridad.
      */
+
+
     public Comportamiento detectarInusual(Transaccion t) {
         Usuario u = t.getUsuario();
         LocalDateTime f = t.getFecha();
@@ -728,8 +751,19 @@ public class SistemaFintech {
                 + t.getId() + ": " + c.getDescripcion() + ". Si no fuiste tú, revierte la operación y cambia tu contraseña.");
         return c;
     }
+    
+     /** Retiros y envíos a otras personas (lo único que analiza la detección). */
+    private static boolean esSalidaReal(Transaccion t) {
+        return t.getTipo() == TipoTransaccion.RETIRO || t.getTipo().esHaciaOtraPersona();
+    }
 
     public SimpleLinkedList<Comportamiento> getAuditoria() { return auditoria; }
+    /** 4.9: consulta posterior de los eventos detectados de un usuario. */
+    public SimpleLinkedList<Comportamiento> eventosDeUsuario(String idUsuario) {
+        return auditoria.filtrar(c -> c.getUsuario().getId().equals(idUsuario));
+    }
+
+
 
     public SimpleLinkedList<Comportamiento> auditoriaFiltrada(NivelRiesgo riesgo, String idUsuario) {
         return auditoria.filtrar(c -> (riesgo == null || c.getNivelRiesgo() == riesgo)
@@ -923,6 +957,15 @@ public class SistemaFintech {
         return sb.toString();
     }
 
+    /* Parametro del sistema (busqueda O(1) en la tabla hash de configuración). */
+
+    public double config(String clave) {
+        Double v = configuracion.get(clave);
+        if (v == null) throw new IllegalArgumentException("No existe el parámetro " + clave);
+        return v;
+    }
+     public TablaHash<String, Double> getConfiguracion() { return configuracion; }
+
     /** true si el objeto cargado de disco está completo y es de esta versión. */
     public boolean esValido() {
         return versionDatos == VERSION_DATOS && usuarios != null && usuariosPorCorreo != null && usuariosPorTelefono != null
@@ -950,6 +993,9 @@ public class SistemaFintech {
     public int cantidadBilleteras() { return listarBilleteras().getSize(); }
     public int cantidadProgramadas() { return programadas.getSize(); }
     public int cantidadNotificacionesPendientes() { return notificacionesPendientes.getSize(); }
+
+    
+
 
 
 }

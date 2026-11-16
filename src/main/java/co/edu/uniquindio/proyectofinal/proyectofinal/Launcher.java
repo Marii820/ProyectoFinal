@@ -1,9 +1,11 @@
 package co.edu.uniquindio.proyectofinal.proyectofinal;
 
-import javafx.application.Application;
-
+/**
+ * Clase de arranque que NO extiende Application: sirve para correr desde el IDE
+ * sin configurar los módulos de JavaFX.
+ */
 public class Launcher {
     public static void main(String[] args) {
-        Application.launch(HelloApplication.class, args);
+        App.main(args);
     }
 }
